@@ -15,6 +15,10 @@
     "知识产权"
   ],
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/roy-tian/cn-trademarks.git"
+  },
   "type": "module",
   "engines": {
     "node": ">=22"
