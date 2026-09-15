@@ -20,19 +20,6 @@ jobs:
           node-version: 24
       - run: npm install --no-fund --no-audit
       - run: npm test
-      - name: Upgrade npm (trusted publishing needs >= 11.5.1)
-        run: |
-          npm --version
-          npm install -g npm@latest
-          npm --version
-      - name: Debug OIDC prerequisites (names only, no values)
-        run: |
-          env | grep -oE '^(CI|GITHUB_ACTIONS|GITHUB_REPOSITORY|GITHUB_REF_TYPE|GITHUB_REF_NAME|ACTIONS_ID_TOKEN_REQUEST_[A-Z]+)' | sort
-          which npm
-          npm --version
-          npm config ls
-          node -p "require('./package.json').repository.url"
-
       - name: Publish (trusted publishing via OIDC)
         run: |
           PKG_VERSION="$(node -p "require('./package.json').version")"
@@ -48,4 +35,6 @@ jobs:
             echo "$PKG_NAME@$PKG_VERSION is already on npm - skipping publish"
             exit 0
           fi
-          npm publish --provenance --access public
+          # verbose surfaces the registry's reason when the OIDC token
+          # exchange fails; otherwise npm silently falls back to ENEEDAUTH
+          npm publish --provenance --access public --loglevel verbose
