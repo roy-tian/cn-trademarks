@@ -1,4 +1,16 @@
+# Node
 node_modules/
 dist/
+coverage/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.ruff_cache/
+
+# Local files
+.env
+:memory:.ses
 *.log
 .DS_Store
