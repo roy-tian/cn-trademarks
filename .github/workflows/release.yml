@@ -25,6 +25,14 @@ jobs:
           npm --version
           npm install -g npm@latest
           npm --version
+      - name: Debug OIDC prerequisites (names only, no values)
+        run: |
+          env | grep -oE '^(CI|GITHUB_ACTIONS|GITHUB_REPOSITORY|GITHUB_REF_TYPE|GITHUB_REF_NAME|ACTIONS_ID_TOKEN_REQUEST_[A-Z]+)' | sort
+          which npm
+          npm --version
+          npm config ls
+          node -p "require('./package.json').repository.url"
+
       - name: Publish (trusted publishing via OIDC)
         run: |
           PKG_VERSION="$(node -p "require('./package.json').version")"
