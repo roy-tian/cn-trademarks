@@ -1,6 +1,6 @@
 {
   "name": "cn-trademarks",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Chinese trademark Nice-classification snapshots for NCL(10-2016), NCL(11-2022), NCL(12-2025), and NCL(13-2026), with PostgreSQL seeds. 中国类似商品和服务区分表第10至13版完整快照。",
   "keywords": [
     "china",
