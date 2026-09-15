@@ -1646,7 +1646,7 @@
 {"code":"050452","name":"药用植物提取物","type":"item","version":"2026","parentCode":"0501"}
 {"code":"050454","name":"医用或兽医用微生物制剂","type":"item","version":"2025","parentCode":"0501"}
 {"code":"050455","name":"医用草本疗法制剂","type":"item","version":"2025","parentCode":"0501"}
-{"code":"050456","name":"医用草本提50501取物","type":"item","version":"2026","parentCode":"0501"}
+{"code":"050456","name":"医用草本提取物","type":"item","version":"2026","parentCode":"0501"}
 {"code":"050457","name":"性刺激用凝胶","type":"item","version":"2025","parentCode":"0501"}
 {"code":"050458","name":"免疫刺激剂","type":"item","version":"2025","parentCode":"0501"}
 {"code":"050459","name":"治疗用或医用营养制剂","type":"item","version":"2025","parentCode":"0501"}
@@ -2857,7 +2857,7 @@
 {"code":"0745","name":"光学工业用设备","type":"group","version":"2025","parentCode":"07"}
 {"code":"0746","name":"气体分离设备","type":"group","version":"2025","parentCode":"07"}
 {"code":"0747","name":"喷漆机具","type":"group","version":"2025","parentCode":"07"}
-{"code":"0748","name":"食品、药品及化妆品工业用化学品（不包括食品用防腐盐）","type":"group","version":"2026","parentCode":"07"}
+{"code":"0748","name":"发电机，非陆地车辆用马达和引擎，马达和引擎零部件","type":"group","version":"2026","parentCode":"07"}
 {"code":"0749","name":"泵，阀，气体压缩机，鼓风机，液压元件，气动元件","type":"group","version":"2025","parentCode":"07"}
 {"code":"0750","name":"机器传动用联轴节，传动带及其他机器零部件","type":"group","version":"2026","parentCode":"07"}
 {"code":"0751","name":"焊接机械","type":"group","version":"2025","parentCode":"07"}
@@ -4037,7 +4037,7 @@
 {"code":"100004","name":"分娩褥垫","type":"item","version":"2025","parentCode":"1004"}
 {"code":"100005","name":"助听器","type":"item","version":"2025","parentCode":"1004"}
 {"code":"100006","name":"喇叭状助听器","type":"item","version":"2025","parentCode":"1004"}
-{"code":"100007","name":"医疗用X光设备、器械及仪器外科用剪","type":"item","version":"2025","parentCode":"1001"}
+{"code":"100007","name":"外科用剪","type":"item","version":"2025","parentCode":"1001"}
 {"code":"100008","name":"医用针","type":"item","version":"2025","parentCode":"1001"}
 {"code":"100009","name":"缝合针","type":"item","version":"2025","parentCode":"1001"}
 {"code":"100010","name":"子宫托","type":"item","version":"2025","parentCode":"1001"}
@@ -4123,7 +4123,7 @@
 {"code":"100097","name":"皮下注射器","type":"item","version":"2025","parentCode":"1001"}
 {"code":"100098","name":"腹部护垫","type":"item","version":"2025","parentCode":"1004"}
 {"code":"100099","name":"吸入器","type":"item","version":"2025","parentCode":"1001"}
-{"code":"1001","name":"外科、医疗和兽医用仪器、器械、设备，不包括电子、核子、电疗、","type":"group","version":"2025","parentCode":"10"}
+{"code":"1001","name":"外科、医疗和兽医用仪器、器械、设备，不包括电子、核子、电疗、医疗用X光设备、器械及仪器","type":"group","version":"2025","parentCode":"10"}
 {"code":"100100","name":"医用注射针筒","type":"item","version":"2025","parentCode":"1001"}
 {"code":"100101","name":"失眠用催眠枕头","type":"item","version":"2025","parentCode":"1004"}
 {"code":"100102","name":"泌尿科器械及器具","type":"item","version":"2025","parentCode":"1001"}
@@ -4341,7 +4341,7 @@
 {"code":"100323","name":"已配备医疗设备的隔离间","type":"item","version":"2025","parentCode":"1004"}
 {"code":"100324","name":"（辅助发声用）电子喉","type":"item","version":"2025","parentCode":"1001"}
 {"code":"100325","name":"医用低温治疗设备","type":"item","version":"2026","parentCode":"1001"}
-{"code":"100326","name":"兽3/10医用低温治疗设备","type":"item","version":"2026","parentCode":"1001"}
+{"code":"100326","name":"兽医用低温治疗设备","type":"item","version":"2026","parentCode":"1001"}
 {"code":"100327","name":"宠物助行器","type":"item","version":"2025","parentCode":"1010"}
 {"code":"100328","name":"眼镜*","type":"item","version":"2026","parentCode":"1011"}
 {"code":"100329","name":"眼镜片","type":"item","version":"2026","parentCode":"1011"}
@@ -4483,7 +4483,7 @@
 {"code":"110118","name":"灯光漫射器","type":"item","version":"2025","parentCode":"1101"}
 {"code":"110119","name":"饮料冷却装置","type":"item","version":"2025","parentCode":"1105"}
 {"code":"110120","name":"蒸馏装置*","type":"item","version":"2025","parentCode":"1107"}
-{"code":"110121","name":"淋浴器","type":"item","version":"2026","parentCode":"1109"}
+{"code":"110121","name":"淋浴器*","type":"item","version":"2026","parentCode":"1109"}
 {"code":"110122","name":"电灯灯头","type":"item","version":"2025","parentCode":"1101"}
 {"code":"110123","name":"水净化装置","type":"item","version":"2025","parentCode":"1110"}
 {"code":"110124","name":"水过滤器","type":"item","version":"2025","parentCode":"1110"}
@@ -5239,7 +5239,7 @@
 {"code":"140062","name":"橄榄石（宝石），贵橄榄石","type":"item","version":"2025","parentCode":"1403"}
 {"code":"140063","name":"未加工的金或金箔","type":"item","version":"2025","parentCode":"1401"}
 {"code":"140064","name":"金线（首饰）","type":"item","version":"2025","parentCode":"1403"}
-{"code":"140066","name":"饿","type":"item","version":"2025","parentCode":"1401"}
+{"code":"140066","name":"锇","type":"item","version":"2025","parentCode":"1401"}
 {"code":"140067","name":"钯","type":"item","version":"2025","parentCode":"1401"}
 {"code":"140069","name":"饰针（首饰）","type":"item","version":"2025","parentCode":"1403"}
 {"code":"140070","name":"珍珠（珠宝）","type":"item","version":"2025","parentCode":"1403"}
@@ -5330,7 +5330,7 @@
 {"code":"150029","name":"弦乐器","type":"item","version":"2025","parentCode":"1501"}
 {"code":"150030","name":"号（乐器）","type":"item","version":"2025","parentCode":"1501"}
 {"code":"150031","name":"短号（乐器）","type":"item","version":"2025","parentCode":"1501"}
-{"code":"150032","name":"饶钹","type":"item","version":"2025","parentCode":"1501"}
+{"code":"150032","name":"铙钹","type":"item","version":"2025","parentCode":"1501"}
 {"code":"150033","name":"音叉","type":"item","version":"2025","parentCode":"1502"}
 {"code":"150034","name":"吹奏乐器的管口","type":"item","version":"2025","parentCode":"1502"}
 {"code":"150035","name":"乐器盒","type":"item","version":"2025","parentCode":"1502"}
@@ -5868,7 +5868,7 @@
 {"code":"170088","name":"石棉纤维","type":"item","version":"2025","parentCode":"1705"}
 {"code":"170089","name":"管道用非金属加固材料","type":"item","version":"2025","parentCode":"1702"}
 {"code":"170091","name":"石棉","type":"item","version":"2025","parentCode":"1705"}
-{"code":"170092","name":"非文具用、非化妆用、非医用、1702非家用自粘胶带","type":"item","version":"2026","parentCode":"1702"}
+{"code":"170092","name":"非文具用、非化妆用、非医用、非家用自粘胶带","type":"item","version":"2026","parentCode":"1702"}
 {"code":"170093","name":"橡皮挡块","type":"item","version":"2025","parentCode":"1702"}
 {"code":"170094","name":"电缆绝缘体","type":"item","version":"2025","parentCode":"1706"}
 {"code":"170095","name":"非纺织用橡胶线","type":"item","version":"2025","parentCode":"1703"}
@@ -5908,7 +5908,7 @@
 {"code":"170128","name":"半加工有机玻璃","type":"item","version":"2025","parentCode":"1703"}
 {"code":"170129","name":"服装用橡胶制缝制标签","type":"item","version":"2025","parentCode":"1703"}
 {"code":"170130","name":"油封","type":"item","version":"2025","parentCode":"1702"}
-{"code":"170131","name":"0形密封圈","type":"item","version":"2025","parentCode":"1702"}
+{"code":"170131","name":"O形密封圈","type":"item","version":"2025","parentCode":"1702"}
 {"code":"170132","name":"橡胶制防滑垫","type":"item","version":"2025","parentCode":"1702"}
 {"code":"170133","name":"绝缘膜","type":"item","version":"2025","parentCode":"1706"}
 {"code":"170134","name":"电磁干扰屏蔽膜","type":"item","version":"2025","parentCode":"1706"}
@@ -5964,7 +5964,7 @@
 {"code":"180039","name":"半加工或未加工皮革","type":"item","version":"2025","parentCode":"1801"}
 {"code":"180041","name":"家具用皮缘饰，家具用皮装饰","type":"item","version":"2025","parentCode":"1802"}
 {"code":"180042","name":"仿皮革","type":"item","version":"2025","parentCode":"1801"}
-{"code":"180043","name":"伞","type":"item","version":"2026","parentCode":"1804"}
+{"code":"180043","name":"伞*","type":"item","version":"2026","parentCode":"1804"}
 {"code":"180044","name":"抱婴儿用吊袋","type":"item","version":"2025","parentCode":"1802"}
 {"code":"180045","name":"马镫橡皮件","type":"item","version":"2025","parentCode":"1806"}
 {"code":"180046","name":"马镫皮带","type":"item","version":"2025","parentCode":"1806"}
@@ -5985,7 +5985,7 @@
 {"code":"180062","name":"皮制下颏带","type":"item","version":"2025","parentCode":"1802"}
 {"code":"180063","name":"软毛皮（仿皮制品）","type":"item","version":"2025","parentCode":"1801"}
 {"code":"180065","name":"包骨架（包的结构件）","type":"item","version":"2025","parentCode":"1802"}
-{"code":"180066","name":"手1804持女用阳伞","type":"item","version":"2026","parentCode":"1804"}
+{"code":"180066","name":"手持女用阳伞","type":"item","version":"2026","parentCode":"1804"}
 {"code":"180067","name":"毛皮，裘皮","type":"item","version":"2025","parentCode":"1801"}
 {"code":"180068","name":"伞柄","type":"item","version":"2025","parentCode":"1804"}
 {"code":"180069","name":"钱包（钱夹）","type":"item","version":"2025","parentCode":"1802"}
@@ -6757,7 +6757,7 @@
 {"code":"210042","name":"玻璃塞","type":"item","version":"2025","parentCode":"2102"}
 {"code":"210043","name":"开塞钻（电动或非电动）","type":"item","version":"2025","parentCode":"2101"}
 {"code":"210044","name":"装饰用玻璃球","type":"item","version":"2025","parentCode":"2104"}
-{"code":"210045","name":"瓶","type":"item","version":"2026","parentCode":"2101"}
+{"code":"210045","name":"瓶*","type":"item","version":"2026","parentCode":"2101"}
 {"code":"210046","name":"保温瓶，隔热瓶","type":"item","version":"2025","parentCode":"2111"}
 {"code":"210047","name":"冷藏瓶","type":"item","version":"2025","parentCode":"2111"}
 {"code":"210048","name":"开瓶器（电动或非电动）","type":"item","version":"2025","parentCode":"2101"}
@@ -6925,7 +6925,7 @@
 {"code":"210230","name":"彩色玻璃器皿","type":"item","version":"2025","parentCode":"2102"}
 {"code":"210231","name":"运载工具用窗玻璃（半成品）","type":"item","version":"2025","parentCode":"2113"}
 {"code":"210232","name":"有柄大杯","type":"item","version":"2025","parentCode":"2105"}
-{"code":"210234","name":"瓷、陶瓷、陶土、赤陶、22104黏土或玻璃制艺术品","type":"item","version":"2026","parentCode":"2104"}
+{"code":"210234","name":"瓷、陶瓷、陶土、赤陶、黏土或玻璃制艺术品","type":"item","version":"2026","parentCode":"2104"}
 {"code":"210235","name":"盘","type":"item","version":"2025","parentCode":"2101"}
 {"code":"210236","name":"烹饪用非电高压锅，非电加压炊具","type":"item","version":"2025","parentCode":"2101"}
 {"code":"210238","name":"非电动搅拌器","type":"item","version":"2025","parentCode":"2101"}
@@ -6940,7 +6940,7 @@
 {"code":"210248","name":"滤茶球，茶叶浸泡器","type":"item","version":"2025","parentCode":"2105"}
 {"code":"210250","name":"牙刷","type":"item","version":"2025","parentCode":"2108"}
 {"code":"210251","name":"电刷（机器部件除外）","type":"item","version":"2025","parentCode":"2107"}
-{"code":"210252","name":"瓷、陶瓷、1陶土、赤陶、黏土或玻璃制半身像","type":"item","version":"2026","parentCode":"2104"}
+{"code":"210252","name":"瓷、陶瓷、陶土、赤陶、黏土或玻璃制半身像","type":"item","version":"2026","parentCode":"2104"}
 {"code":"210253","name":"非纸制花盆套","type":"item","version":"2025","parentCode":"2106"}
 {"code":"210254","name":"手动磨咖啡器","type":"item","version":"2025","parentCode":"2105"}
 {"code":"210255","name":"咖啡具（餐具）","type":"item","version":"2025","parentCode":"2105"}
@@ -6977,7 +6977,7 @@
 {"code":"210286","name":"非纺织用玻璃纤维线","type":"item","version":"2025","parentCode":"2113"}
 {"code":"210287","name":"非电咖啡壶","type":"item","version":"2025","parentCode":"2105"}
 {"code":"210288","name":"滤茶器","type":"item","version":"2025","parentCode":"2105"}
-{"code":"210289","name":"长颈瓶","type":"item","version":"2026","parentCode":"2101"}
+{"code":"210289","name":"长颈瓶*","type":"item","version":"2026","parentCode":"2101"}
 {"code":"210290","name":"家务手套","type":"item","version":"2025","parentCode":"2112"}
 {"code":"210291","name":"单柄大酒杯","type":"item","version":"2025","parentCode":"2105"}
 {"code":"210292","name":"油和醋用调味套瓶","type":"item","version":"2025","parentCode":"2101"}
@@ -7688,7 +7688,7 @@
 {"code":"260019","name":"花边","type":"item","version":"2025","parentCode":"2601"}
 {"code":"260020","name":"织补架","type":"item","version":"2025","parentCode":"2607"}
 {"code":"260021","name":"纽扣*","type":"item","version":"2025","parentCode":"2603"}
-{"code":"260022","name":"撤扣","type":"item","version":"2025","parentCode":"2603"}
+{"code":"260022","name":"揿扣","type":"item","version":"2025","parentCode":"2603"}
 {"code":"260023","name":"箍袖带","type":"item","version":"2025","parentCode":"2601"}
 {"code":"260024","name":"臂带（服装配件），臂章","type":"item","version":"2025","parentCode":"2602"}
 {"code":"260026","name":"吊带钩扣，背带钩扣","type":"item","version":"2025","parentCode":"2603"}
@@ -9969,7 +9969,7 @@
 {"code":"410092","name":"电子桌面排版","type":"item","version":"2025","parentCode":"4104"}
 {"code":"410093","name":"配翻译字幕","type":"item","version":"2025","parentCode":"4105"}
 {"code":"410094","name":"通过计算机网络在线提供的游戏服务","type":"item","version":"2025","parentCode":"4105"}
-{"code":"410095","name":"提供卡拉0K服务","type":"item","version":"2025","parentCode":"4105"}
+{"code":"410095","name":"提供卡拉OK服务","type":"item","version":"2025","parentCode":"4105"}
 {"code":"410097","name":"作曲","type":"item","version":"2025","parentCode":"4105"}
 {"code":"410098","name":"夜总会娱乐服务","type":"item","version":"2025","parentCode":"4105"}
 {"code":"410099","name":"提供不可下载的在线电子出版物","type":"item","version":"2025","parentCode":"4104"}
@@ -10075,7 +10075,7 @@
 {"code":"42","name":"科学技术服务和与之相关的研究与设计服务；工业分析、工业研究和工业品外观设计服务；质量控制和质量认证服务；计算机硬件与软件的设计与开发。","type":"class","version":"2026","parentCode":null}
 {"code":"420007","name":"化学分析","type":"item","version":"2025","parentCode":"4211"}
 {"code":"420008","name":"油田开采分析","type":"item","version":"2025","parentCode":"4210"}
-{"code":"420011","name":"建筑学服务","type":"item","version":"2026","parentCode":"4217"}
+{"code":"420011","name":"建筑学服务*","type":"item","version":"2026","parentCode":"4217"}
 {"code":"420017","name":"细菌学研究","type":"item","version":"2025","parentCode":"4212"}
 {"code":"420030","name":"化学服务","type":"item","version":"2025","parentCode":"4211"}
 {"code":"420031","name":"化学研究","type":"item","version":"2025","parentCode":"4211"}
@@ -10599,7 +10599,7 @@
 {"code":"C010050","name":"丁酸","type":"item","version":"2025","parentCode":"0102"}
 {"code":"C010051","name":"甲基丙烯酸","type":"item","version":"2025","parentCode":"0102"}
 {"code":"C010052","name":"琥珀酸","type":"item","version":"2025","parentCode":"0102"}
-{"code":"C010053","name":"已二酸","type":"item","version":"2025","parentCode":"0102"}
+{"code":"C010053","name":"己二酸","type":"item","version":"2025","parentCode":"0102"}
 {"code":"C010054","name":"氯乙酸","type":"item","version":"2025","parentCode":"0102"}
 {"code":"C010055","name":"环烷酸","type":"item","version":"2025","parentCode":"0102"}
 {"code":"C010056","name":"石油磺酸","type":"item","version":"2025","parentCode":"0102"}
@@ -10656,8 +10656,8 @@
 {"code":"C010108","name":"丙烯醇","type":"item","version":"2025","parentCode":"0102"}
 {"code":"C010109","name":"异丁醇","type":"item","version":"2025","parentCode":"0102"}
 {"code":"C010110","name":"叔丁醇","type":"item","version":"2025","parentCode":"0102"}
-{"code":"C010111","name":"已醇","type":"item","version":"2025","parentCode":"0102"}
-{"code":"C010112","name":"环已醇","type":"item","version":"2025","parentCode":"0102"}
+{"code":"C010111","name":"己醇","type":"item","version":"2025","parentCode":"0102"}
+{"code":"C010112","name":"环己醇","type":"item","version":"2025","parentCode":"0102"}
 {"code":"C010113","name":"一缩二乙二醇","type":"item","version":"2025","parentCode":"0102"}
 {"code":"C010114","name":"二缩三乙二醇","type":"item","version":"2025","parentCode":"0102"}
 {"code":"C010115","name":"季戊四醇","type":"item","version":"2025","parentCode":"0102"}

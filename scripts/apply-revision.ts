@@ -111,7 +111,10 @@ for (const bullet of bullets) {
   const renameMatches = [...bullet.matchAll(renameRe)];
   for (const [, code, oldName, newName] of renameMatches) {
     const row = byCode.get(code);
-    const cleanNew = stripWs(newName);
+    // stripWs drops a trailing * cross-group marker; renames that add one
+    // (伞 → 伞*) must keep it.
+    const cleanNew =
+      stripWs(newName) + (/\*\s*$/.test(newName) ? "*" : "");
     if (!cleanNew) continue;
     if (!row || row.type !== "item") {
       report.push(`改名 ${code} "${stripWs(oldName)}"→"${cleanNew}"：基础层无此项目`);
@@ -188,6 +191,59 @@ for (const bullet of bullets) {
         deletedItems++;
       }
     }
+  }
+}
+
+// Confirmed OCR/版式伪影 in the legacy single-edition source.  Keep these
+// corrections in the regeneration path so rebuilding data/nice.jsonl does
+// not reintroduce the same lookup failures.  Entry fires only when the
+// current name still equals the recorded bad value; a mismatch is reported
+// so stale entries cannot rot silently.
+const OCR_FIXES: Record<string, [string, string]> = {
+  "050456": ["医用草本提50501取物", "医用草本提取物"],
+  "100326": ["兽3/10医用低温治疗设备", "兽医用低温治疗设备"],
+  "140066": ["饿", "锇"],
+  "150032": ["饶钹", "铙钹"],
+  "170092": [
+    "非文具用、非化妆用、非医用、1702非家用自粘胶带",
+    "非文具用、非化妆用、非医用、非家用自粘胶带",
+  ],
+  "170131": ["0形密封圈", "O形密封圈"],
+  "180066": ["手1804持女用阳伞", "手持女用阳伞"],
+  "210234": [
+    "瓷、陶瓷、陶土、赤陶、22104黏土或玻璃制艺术品",
+    "瓷、陶瓷、陶土、赤陶、黏土或玻璃制艺术品",
+  ],
+  "210252": [
+    "瓷、陶瓷、1陶土、赤陶、黏土或玻璃制半身像",
+    "瓷、陶瓷、陶土、赤陶、黏土或玻璃制半身像",
+  ],
+  "260022": ["撤扣", "揿扣"],
+  "410095": ["提供卡拉0K服务", "提供卡拉OK服务"],
+  C010053: ["已二酸", "己二酸"],
+  C010111: ["已醇", "己醇"],
+  C010112: ["环已醇", "环己醇"],
+  // 版式伪影 hitting groups: 0748 picked up the class-01 标题 via the group
+  // rename regex, 1001's title is cut mid-sentence by the scan layout.
+  "0748": [
+    "食品、药品及化妆品工业用化学品（不包括食品用防腐盐）",
+    "发电机，非陆地车辆用马达和引擎，马达和引擎零部件",
+  ],
+  "1001": [
+    "外科、医疗和兽医用仪器、器械、设备，不包括电子、核子、电疗、",
+    "外科、医疗和兽医用仪器、器械、设备，不包括电子、核子、电疗、医疗用X光设备、器械及仪器",
+  ],
+  "100007": ["医疗用X光设备、器械及仪器外科用剪", "外科用剪"],
+};
+for (const [code, [bad, fixed]] of Object.entries(OCR_FIXES)) {
+  const row = byCode.get(code);
+  if (row?.name === bad) {
+    row.name = fixed;
+    report.push(`OCR 修正 ${code}: "${bad}"→"${fixed}"`);
+  } else if (row && row.name !== fixed) {
+    report.push(
+      `OCR 修正 ${code} 未命中：当前 "${row.name}"（预期 "${bad}"）`,
+    );
   }
 }
 
