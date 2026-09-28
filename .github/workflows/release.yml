@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write  # 创建 GitHub Release；npm 发布用 id-token
   id-token: write
 
 jobs:
@@ -21,6 +21,7 @@ jobs:
       - run: npm install --no-fund --no-audit
       - run: npm test
       - name: Publish (trusted publishing via OIDC)
+        id: publish
         run: |
           PKG_VERSION="$(node -p "require('./package.json').version")"
           PKG_NAME="$(node -p "require('./package.json').name")"
@@ -38,3 +39,14 @@ jobs:
           # verbose surfaces the registry's reason when the OIDC token
           # exchange fails; otherwise npm silently falls back to ENEEDAUTH
           npm publish --provenance --access public --loglevel verbose
+          echo "published=true" >> "$GITHUB_OUTPUT"
+      - name: Create GitHub release
+        if: github.ref_type == 'tag' && steps.publish.outputs.published == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          PKG_VERSION="$(node -p "require('./package.json').version")"
+          gh release create "$GITHUB_REF_NAME" \
+            --title "$GITHUB_REF_NAME" \
+            --notes "npm: cn-trademarks@$PKG_VERSION —— GitHub Actions OIDC trusted publishing 发布，含 provenance。" \
+            --generate-notes
