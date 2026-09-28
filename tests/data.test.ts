@@ -83,4 +83,37 @@ describe("cn-trademarks dataset", () => {
     const tuples = sql.match(/\('[^']+',/g) ?? [];
     assert.equal(tuples.length, rows.length);
   });
+
+  it("SQL ships a balanced-alias view for merged synonyms", () => {
+    const sql = readFileSync(sqlPath, "utf-8");
+    assert.match(sql, /CREATE OR REPLACE VIEW "trademark_nice_alias"/);
+    assert.match(sql, /string_to_array\("name", '，'\)/);
+    assert.match(sql, /WHERE "type" = 'item'/);
+    // 括号平衡过滤：括号内含全角逗号的名称不产生残缺片段
+    assert.match(
+      sql,
+      /AND length\(translate\("alias", '（\(', ''\)\) = length\(translate\("alias", '）\)', ''\)\)/,
+    );
+  });
+
+  it("alias splitting resolves single-synonym lookups", () => {
+    // 与 SQL 视图同逻辑：按全角逗号拆分 item 名称，只保留括号平衡的片段。
+    const balanced = (a: string) =>
+      (a.match(/[（(]/g) ?? []).length === (a.match(/[）)]/g) ?? []).length;
+    const aliases = (row: NiceRow) =>
+      row.name.split("，").map((p) => p.trim()).filter(balanced);
+    const find = (a: string) =>
+      rows
+        .filter((r) => r.type === "item" && aliases(r).includes(a))
+        .map((r) => r.code);
+    // 「电池用防泡沫溶液，蓄电池用防泡沫溶液」两个别名均可精确命中
+    assert.deepEqual(find("电池用防泡沫溶液"), ["010006"]);
+    assert.deepEqual(find("蓄电池用防泡沫溶液"), ["010006"]);
+    // 括号内含全角逗号：仅保留平衡片段，残缺片段不出现
+    assert.deepEqual(find("传送带"), ["C070359"]);
+    assert.deepEqual(find("棕编制品（包括棕箱"), []);
+    for (const row of rows.filter((r) => r.type === "item"))
+      for (const a of aliases(row))
+        assert.ok(a.length > 0, `empty alias at ${row.code}`);
+  });
 });

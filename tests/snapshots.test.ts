@@ -144,4 +144,38 @@ describe("complete NCL edition snapshots", () => {
     assert.ok(sql.includes("(13, 2026, '340001', '3403', 'item', '火柴', '2025')"));
     assert.ok(sql.includes("(10, 2016, '010013', '0102', 'item', '四氯乙烷', '2016')"));
   });
+
+  it("SQL ships a balanced-alias view for merged synonyms", () => {
+    const sql = readFileSync(
+      join(import.meta.dirname, "../sql/postgresql/trademark_nice_snapshots.sql"),
+      "utf-8",
+    );
+    assert.match(sql, /CREATE OR REPLACE VIEW "trademark_nice_snapshot_alias"/);
+    assert.match(sql, /string_to_array\("name", '，'\)/);
+    assert.match(
+      sql,
+      /AND length\(translate\("alias", '（\(', ''\)\) = length\(translate\("alias", '）\)', ''\)\)/,
+    );
+  });
+
+  it("alias splitting resolves single-synonym lookups in every edition", () => {
+    // 与 SQL 视图同逻辑：按全角逗号拆分 item 名称，只保留括号平衡的片段。
+    const balanced = (a: string) =>
+      (a.match(/[（(]/g) ?? []).length === (a.match(/[）)]/g) ?? []).length;
+    const aliases = (name: string) =>
+      name.split("，").map((p) => p.trim()).filter(balanced);
+    const find = (edition: number, a: string) =>
+      editions
+        .get(edition)!
+        .filter((r) => r.type === "item" && aliases(r.name).includes(a))
+        .map((r) => r.code);
+    assert.deepEqual(find(13, "计量仪表"), ["090138"]); // 「计数器，计量仪表」
+    assert.deepEqual(find(13, "苏打灰"), ["010100"]); // 「纯碱，苏打灰」
+    assert.deepEqual(find(10, "蓄电池用防泡沫溶液"), ["010006"]);
+    for (const { edition } of snapshots)
+      for (const row of editions.get(edition)!)
+        if (row.type === "item")
+          for (const a of aliases(row.name))
+            assert.ok(a.length > 0, `empty alias at ${edition}/${row.code}`);
+  });
 });

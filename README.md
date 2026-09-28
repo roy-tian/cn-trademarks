@@ -11,7 +11,7 @@
 
 每行是 `{ "code", "parentCode", "type", "name", "version" }`，按编码排序。`type` 分为 `class`（两位大类编号）、`group`（四位类似群编号）、`item`（六位编号或 `C` 加六位中国增补编号）。**快照所属版本由文件名和 SQL 的 `edition` 列确定**。`version`（SQL 的 `source_year`）含义按版本而异：NCL13-2026 沿用旧含义（条目文本的来源/最后修订年份，2025 或 2026），NCL10/11/12 因缺乏逐年修订记录统一填快照年份，不可跨版本比较。不同版本的同一编号可能有不同名称或归属，例如 `C010254` 在 2025 年为“固化剂”，在 2026 年为“椰子醛”。
 
-`data/nice.jsonl` 和 `sql/postgresql/trademark_nice.sql` 保留原有 2026 单版数据及播种方式，供现有消费者兼容使用。注意：本版修正了原文件中的确认提取错误（14 个项目名称字误，以及群组 0748/1001 的标题、100007 的粘连名称、5 个项目丢失的 `*` 跨类似群标记），行数与编码不变，但名称有变——已播种的数据库需要按新文件 UPDATE 这些编码（严格 INSERT 过滤不会更新既有行）。新快照根据历年官方文本和两岸分类对照表校验，因此与原单版文件在少量编码和名称上不同；新消费者应使用 `data/snapshots/` 和 `sql/postgresql/trademark_nice_snapshots.sql`。来源及提取局限见 [NOTICE.md](NOTICE.md)。
+`data/nice.jsonl` 和 `sql/postgresql/trademark_nice.sql` 保留原有 2026 单版数据及播种方式，供现有消费者兼容使用。注意：本版修正了原文件中的确认提取错误（14 个项目名称字误，以及群组 0748/1001 的标题、100007 的粘连名称、5 个项目丢失的 `*` 跨类似群标记），行数与编码不变，但名称有变——已播种的数据库可执行 `sql/postgresql/trademark_nice_fixes_v0.1.1.sql`（22 条幂等 UPDATE）同步；严格 INSERT 过滤不会更新既有行。新快照根据历年官方文本和两岸分类对照表校验，因此与原单版文件在少量编码和名称上不同；新消费者应使用 `data/snapshots/` 和 `sql/postgresql/trademark_nice_snapshots.sql`。来源及提取局限见 [NOTICE.md](NOTICE.md)。
 
 ## PostgreSQL 使用
 
@@ -30,7 +30,15 @@ FROM trademark_nice_snapshot
 WHERE edition = 12 AND code = '440092';
 ```
 
-同码同义词仍以全角逗号合并为一个 `name`。只输入其中一个别名做精确匹配时可能查不到，调用方可按需做包含检索或建立别名表。项目编号前四位**不一定**是所属类似群；应使用 `parentCode`，不要从编码推导。
+同码同义词仍以全角逗号合并为一个 `name`。两份 SQL 各附带别名视图（`trademark_nice_alias` / `trademark_nice_snapshot_alias`），把 item 的合并名称拆成独立别名行，单一别名可直接精确匹配：
+
+```sql
+SELECT code, parent_code
+FROM trademark_nice_snapshot_alias
+WHERE edition = 13 AND alias = '计量仪表';  -- 090138「计数器，计量仪表」
+```
+
+视图仅拆分 `type = 'item'`（类别和群组标题含合法全角逗号）；别名保留 `*` 跨类似群标记；只输出括号平衡的完整别名——括号内含全角逗号的名称（如 `C070359`、`C200016`）不产生残缺片段，其原名称仍可对主表 `name` 做包含检索。项目编号前四位**不一定**是所属类似群；应使用 `parentCode`，不要从编码推导。
 
 ## 重新生成
 

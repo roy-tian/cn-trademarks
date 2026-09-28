@@ -12542,3 +12542,8 @@ INSERT INTO "trademark_nice" ("code", "parent_code", "type", "name", "version") 
 ('C440006', '4405', 'item', '配镜服务', '2026'),
 ('C450001', '4502', 'item', '家务服务', '2025'),
 ('C450002', '4506', 'item', '知识产权代理服务', '2025');
+CREATE OR REPLACE VIEW "trademark_nice_alias" AS
+SELECT "code", "parent_code", "type", trim("alias") AS "alias"
+FROM "trademark_nice", unnest(string_to_array("name", '，')) AS "alias"
+WHERE "type" = 'item'
+  AND length(translate("alias", '（(', '')) = length(translate("alias", '）)', ''));

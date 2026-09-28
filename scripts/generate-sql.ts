@@ -42,6 +42,18 @@ for (let i = 0; i < rows.length; i += BATCH) {
   );
 }
 
+// 同码同义词以全角逗号合并进 name，单一别名精确匹配查不到；
+// 此视图把 item 的合并名称拆为别名行（类别/群组标题含合法逗号，不拆）。
+// 只保留括号平衡的完整别名：括号内含全角逗号的名称（如 C070359、C200016）
+// 产生的残缺片段不出现在视图中，其原名称仍可在主表全文检索。
+chunks.push(
+  `CREATE OR REPLACE VIEW "trademark_nice_alias" AS
+SELECT "code", "parent_code", "type", trim("alias") AS "alias"
+FROM "trademark_nice", unnest(string_to_array("name", '，')) AS "alias"
+WHERE "type" = 'item'
+  AND length(translate("alias", '（(', '')) = length(translate("alias", '）)', ''))`,
+);
+
 mkdirSync(dirname(outPath), { recursive: true });
 writeFileSync(outPath, chunks.join(";\n") + ";\n");
 console.log(

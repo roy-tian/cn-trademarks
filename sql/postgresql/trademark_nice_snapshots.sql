@@ -11,6 +11,11 @@ CREATE TABLE IF NOT EXISTS "trademark_nice_snapshot" (
 );
 CREATE INDEX IF NOT EXISTS "trademark_nice_snapshot_name_idx"
   ON "trademark_nice_snapshot" ("edition", "type", "name");
+CREATE OR REPLACE VIEW "trademark_nice_snapshot_alias" AS
+SELECT "edition", "code", "parent_code", "type", trim("alias") AS "alias"
+FROM "trademark_nice_snapshot", unnest(string_to_array("name", '，')) AS "alias"
+WHERE "type" = 'item'
+  AND length(translate("alias", '（(', '')) = length(translate("alias", '）)', ''));
 INSERT INTO "trademark_nice_snapshot" ("edition", "edition_year", "code", "parent_code", "type", "name", "source_year") VALUES
 (10, 2016, '01', NULL, 'class', '用于工业、科学、摄影、农业、园艺和林业的化学品;未加工人造合成树脂,未加工塑料物质;肥料;灭火用合成物;淬火和焊接用制剂;保存食品用化学品;鞣料;工业用粘合剂。', '2016'),
 (10, 2016, '010001', '0104', 'item', '易燃制剂(发动机燃料用化学添加剂)', '2016'),

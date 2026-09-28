@@ -13,10 +13,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: 24
       - run: npm install --no-fund --no-audit
       - run: npm test
       - name: Seed SQL smoke test
-        run: grep -q 'INSERT INTO "trademark_nice"' sql/postgresql/trademark_nice.sql
+        run: |
+          grep -q 'INSERT INTO "trademark_nice"' sql/postgresql/trademark_nice.sql
+          grep -q 'INSERT INTO "trademark_nice_snapshot"' sql/postgresql/trademark_nice_snapshots.sql
+          grep -q 'CREATE OR REPLACE VIEW "trademark_nice_snapshot_alias"' sql/postgresql/trademark_nice_snapshots.sql
