@@ -33,6 +33,7 @@
     "sql",
     "scripts/*.ts",
     "scripts/*.py",
+    "scripts/*.tsv",
     "README.md",
     "NOTICE.md",
     "LICENSE"

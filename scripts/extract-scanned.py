@@ -1,9 +1,14 @@
 """Parse positioned OCR lines into a draft Chinese classification snapshot.
 
-Usage: python scripts/extract-scanned.py <2022|2025> <ocr.jsonl> <draft.jsonl>
-The draft is combined with the bilateral ODS files by build-snapshots.py.
+Usage: python scripts/extract-scanned.py <2022|2025> <ocr.jsonl>... <draft.jsonl>
+Pass every OCR run of the PDF (ocr-scanned.py at scales 1.3 and 1.6, then
+--gaps): the first run is the base and later runs fill in lines it skipped or
+offer another reading of the same line.
+The draft is raw OCR: build-snapshots.py cross-checks every name against the
+other CN sources and applies the reviewed corrections.
 """
 
+import bisect
 import collections
 import difflib
 import json
@@ -11,21 +16,47 @@ import re
 import sys
 from pathlib import Path
 
-if len(sys.argv) != 4:
-    raise SystemExit("usage: extract-scanned.py <2022|2025> <ocr.jsonl> <draft.jsonl>")
-source, ocr_path, out = sys.argv[1:4]
+if len(sys.argv) < 4:
+    raise SystemExit("usage: extract-scanned.py <2022|2025> <ocr.jsonl>... <draft.jsonl>")
+source, *ocr_paths, out = sys.argv[1:]
 if source not in ("2022", "2025"):
     raise SystemExit("year must be 2022 or 2025")
-with Path(ocr_path).open(encoding="utf-8") as stream:
-    pages = []
-    for line in stream:
-        try:
-            record = json.loads(line)
-        except json.JSONDecodeError:
-            continue  # torn tail left by a killed ocr-scanned.py run
-        if record["source"] == source:
-            pages.append(record)
-    pages.sort(key=lambda p: p["page"])
+code_re = re.compile(r"(?<!\d)C?\d{6}(?!\d)")
+by_page = {}
+for ocr_path in ocr_paths:
+    with Path(ocr_path).open(encoding="utf-8") as stream:
+        for line in stream:
+            try:
+                record = json.loads(line)
+            except json.JSONDecodeError:
+                continue  # torn tail left by a killed ocr-scanned.py run
+            if record["source"] != source:
+                continue
+            if record.get("gaps"):
+                # Gap reads only recover missed item lines; a strip can also
+                # clip a heading into noise ("第二类" read as "第二天").
+                record["lines"] = [z for z in record["lines"] if code_re.search(z["text"])]
+            base = by_page.setdefault(record["page"], record)
+            if base is record:
+                continue
+            # Add a line where the base run has nothing at that height; where
+            # it has, keep this reading as an alternative for the same line.
+            added = []
+            for z in record["lines"]:
+                same = [b for b in base["lines"] if abs(b["y"] - z["y"]) <= 6]
+                if not same:
+                    added.append(z)
+                elif len(same) == 1:
+                    same[0].setdefault("alts", []).append(z["text"])
+            base["lines"] = sorted(base["lines"] + added, key=lambda z: (z["y"], z["x"]))
+pages = sorted(by_page.values(), key=lambda p: p["page"])
+for p in pages:
+    for z in p["lines"]:
+        # A reading with more item codes lost less of the line.
+        best = max([z["text"], *z.get("alts", [])], key=lambda t: len(code_re.findall(t)))
+        if len(code_re.findall(best)) > len(code_re.findall(z["text"])):
+            z["alts"] = [z["text"], *[t for t in z["alts"] if t != best]]
+            z["text"] = best
 if source == "2025":
     pages = [p for p in pages if p["page"] >= 29]
 known_groups = collections.defaultdict(list)
@@ -42,25 +73,25 @@ def norm(s):
 
 
 group_re = re.compile(r"^\s*#?\s*(\d{4})(?!\d)\s*(.+)$")
-code_re = re.compile(r"(?<!\d)C?\d{6}(?!\d)")
 selected = {}
 for p in pages:
     for i, z in enumerate(p["lines"]):
         if z["y"] < 70 or z["y"] > 760:
             continue
-        m = group_re.match(z["text"])
-        if not m or m[1] not in known_groups or code_re.search(m[2]):
-            continue
-        name = m[2].strip()
-        score = max(
-            difflib.SequenceMatcher(None, norm(name), norm(x)).ratio()
-            for x in known_groups[m[1]]
-        )
-        if score < 0.65:
-            continue
-        prev = selected.get(m[1])
-        if not prev or score > prev[0]:
-            selected[m[1]] = (score, p["page"], i, name)
+        for text in [z["text"], *z.get("alts", [])]:  # a heading may read better in another run
+            m = group_re.match(text)
+            if not m or m[1] not in known_groups or code_re.search(m[2]):
+                continue
+            name = m[2].strip()
+            score = max(
+                difflib.SequenceMatcher(None, norm(name), norm(x)).ratio()
+                for x in known_groups[m[1]]
+            )
+            if score < 0.65:
+                continue
+            prev = selected.get(m[1])
+            if not prev or score > prev[0]:
+                selected[m[1]] = (score, p["page"], i, name)
 selected_positions = {
     (page, i): (code, name, score) for code, (score, page, i, name) in selected.items()
 }
@@ -96,9 +127,14 @@ def flush():
     global buffer
     if not current_group or not buffer:
         return
-    s = "".join(buffer)
+    s = "".join(text for text, _ in buffer)
+    # Offset where each buffered line starts, to report the page a code is on.
+    starts = [0]
+    for text, _ in buffer[:-1]:
+        starts.append(starts[-1] + len(text))
     prev = 0
     for m in code_re.finditer(s):
+        page = buffer[bisect.bisect_right(starts, m.start()) - 1][1]
         raw = s[prev : m.start()]
         # Keep meaningful leading numerals/parentheses; remove only list
         # separators and a complete section marker such as ``（一）``.
@@ -112,6 +148,7 @@ def flush():
                 "name": name,
                 "type": "item",
                 "parentCode": current_group,
+                "page": page,
             }
         )
         prev = m.end()
@@ -137,7 +174,11 @@ for p in pages:
             ):
                 item_mode = True
         pos = (p["page"], i)
-        cm = class_re.fullmatch(text)
+        # Like group headings, a class heading may read better in another run.
+        cm = next(
+            (m for t in [text, *z.get("alts", [])] if (m := class_re.fullmatch(t.strip()))),
+            None,
+        )
         if cm and z["x"] > 170:
             number = cn_int(cm.group(1))
             if number != len(classes) + 1:
@@ -150,7 +191,13 @@ for p in pages:
             item_mode = False
             current_class = f"{number:02d}"
             classes.append(
-                {"code": current_class, "name": "", "type": "class", "parentCode": None}
+                {
+                    "code": current_class,
+                    "name": "",
+                    "type": "class",
+                    "parentCode": None,
+                    "page": p["page"],
+                }
             )
             class_title = []
             title_mode = True
@@ -174,6 +221,7 @@ for p in pages:
                     "name": g[1],
                     "type": "group",
                     "parentCode": current_class,
+                    "page": p["page"],
                 }
             )
             continue
@@ -186,31 +234,24 @@ for p in pages:
         if part_re.match(text) and code_re.search(text):
             item_mode = True
         if item_mode:
-            buffer.append(text)
+            buffer.append((text, p["page"]))
 flush()
+# One row per code; ``listings`` keeps every (group, name, page) printing in
+# book order, which build-snapshots.py needs to apply per-group revisions.
 bycode = {}
 dupes = []
 for row in items:
+    listing = [row["parentCode"], row["name"], row["page"]]
     old = bycode.get(row["code"])
     if old:
         if old["parentCode"] != row["parentCode"]:
             dupes.append((row["code"], old["parentCode"], row["parentCode"]))
         if row["name"] and row["name"] not in old["name"].split("，"):
             old["name"] += "，" + row["name"]
+        old["listings"].append(listing)
     else:
         bycode[row["code"]] = row
-# Confirmed visual corrections for characters that RapidOCR confuses in the
-# Chinese supplemental list.  Applying them here keeps the intermediate draft
-# correct even when it is inspected or reused without the assembly step.
-OCR_FIXES = {
-    "C010053": "己二酸",
-    "C010111": "己醇",
-    "C010112": "环己醇",
-    "C070362": "（管道）疏通挖泥车",
-}
-for code, name in OCR_FIXES.items():
-    if code in bycode:
-        bycode[code]["name"] = name
+        row["listings"] = [listing]
 rows = classes + groups + list(bycode.values())
 rows.sort(key=lambda r: r["code"])
 Path(out).parent.mkdir(parents=True, exist_ok=True)
